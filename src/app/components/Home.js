@@ -6,13 +6,46 @@ export class Home extends React.Component {
     this.state = {
       age: props.initialAge,
       status: 0,
-      homeLink: "Changed Link"
+      homeLink: props.initialLinkName
     };
     setTimeout(() => {
       this.setState({
         status: 1
       });
     }, 3000);
+    console.log('constructor');
+  }
+
+  componentWillMount() {
+    console.log("Component will mount!");
+  }
+
+  componentDidMount() {
+    console.log("Component Did Mount!");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("Component will recieve props", nextProps);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("Should Component Update", nextProps, nextState);
+    // if (nextState.status === 1) {
+    //   return false;
+    // }
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("Component Will Update!", nextProps, nextState);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Component Did Update", prevProps, prevState);
+  }
+
+  componentWillUnmount() {
+    console.log("component will unmount");
   }
 
   onMakeOlder() {
@@ -23,6 +56,12 @@ export class Home extends React.Component {
 
   onChangeLink() {
     this.props.changeLink(this.state.homeLink);
+  }
+
+  onHandleChange(event) {
+    this.setState({
+      homeLink: event.target.value
+    });
   }
 
   render() {
@@ -37,6 +76,8 @@ export class Home extends React.Component {
         <hr/>
         <button onClick={this.props.greet} className="btn btn-primary">Greet</button>
         <hr/>
+        <input type="text" value={this.state.homeLink}
+               onChange={(event) => this.onHandleChange(event)}/>
         <button onClick={this.onChangeLink.bind(this)} className="btn btn-primary">Change Header Link</button>
       </div>
     );
@@ -46,5 +87,6 @@ export class Home extends React.Component {
 Home.propTypes = {
   name: React.PropTypes.string,
   initialAge: React.PropTypes.number,
-  greet: React.PropTypes.func
+  greet: React.PropTypes.func,
+  initialLinkName: React.PropTypes.string
 };
